@@ -31,6 +31,9 @@ use state_structure_mod, only : add_domain, get_domain_size
 
 use ensemble_manager_mod, only : ensemble_type
 
+use obs_kind_mod,        only : QTY_SOC_Tot, QTY_SOC_C5, QTY_SOC_C8, &
+                                 QTY_SOC_C9, QTY_SOC_C10
+
 ! These routines are passed through from default_model_mod.
 ! To write model specific versions of these routines
 ! remove the routine from this use statement and add your code to
@@ -69,6 +72,9 @@ character(len=256), parameter :: source   = "model_mod.f90"
 logical :: module_initialized = .false.
 integer :: dom_id ! used to access the state structure
 type(time_type) :: assimilation_time_step 
+
+! Model size is fixed
+integer(i8), parameter :: model_size = 5
 
 ! Example Namelist
 ! Use the namelist for options to be set at runtime.
@@ -127,7 +133,7 @@ integer(i8) :: get_model_size
 
 if ( .not. module_initialized ) call static_init_model
 
-get_model_size = get_domain_size(dom_id)
+get_model_size = model_size
 
 end function get_model_size
 
@@ -204,8 +210,14 @@ if ( .not. module_initialized ) call static_init_model
 location = set_location_missing()
 
 ! should be set to the physical quantity, e.g. QTY_TEMPERATURE
-if (present(qty)) qty = 0  
-
+if (present(qty)) THEN
+   if(index_in .EQ. 1) qty = QTY_SOC_Tot
+   if(index_in .EQ. 2) qty = QTY_SOC_C5
+   if(index_in .EQ. 3) qty = QTY_SOC_C8
+   if(index_in .EQ. 4) qty = QTY_SOC_C9
+   if(index_in .EQ. 5) qty = QTY_SOC_C10
+end if
+   
 end subroutine get_state_meta_data
 
 
