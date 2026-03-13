@@ -6,11 +6,11 @@ obs_type_definitions
   num_copies:            1  num_qc:            1
 observation
 Data QC
-first:  1last:  1
+first:  1 last:  1
  OBS  1
    9.32299941473366
    0
- -1 2 -1
+ -1 -1 -1
 obdef
 loc1d
  1
